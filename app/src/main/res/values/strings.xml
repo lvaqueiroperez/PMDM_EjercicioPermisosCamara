@@ -2,4 +2,7 @@
     <string name="app_name">EjerPermisosCamara</string>
     <string name="textoInfo1">Se va a pedir permisos de uso de la cámara</string>
     <string name="btnCheck">CheckPermisos</string>
+    <string name="btnFoto">Sacar Foto</string>
+    <string name="image"></string>
+    <string name="btnMostrar">Mostrar Foto</string>
 </resources>

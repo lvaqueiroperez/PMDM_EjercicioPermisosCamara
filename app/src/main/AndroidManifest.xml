@@ -3,8 +3,8 @@
     package="com.ejemploapp2.ejerpermisoscamara">
     <!--AÑADIMOS EN EL MANIFEST LOS PERMISOS QUE NECESITEMOS -->
     <uses-permission android:name="android.permission.CAMERA" />
-
-
+    <!--PARA RESTRINGIR NUESTRA APLICACIÓN SOLO A DISPOSITIVOS MÓVILES CON CÁMARA:-->
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

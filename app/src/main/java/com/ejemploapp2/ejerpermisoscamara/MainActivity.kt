@@ -12,8 +12,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.toast
 import java.util.jar.Manifest
 
-//CÓDIGOS DE SOLICITUD (TIENEN QUE TENER VALORES DISTINTOS !!!)
+//CÓDIGOS DE SOLICITUD (TIENEN QUE TENER VALORES DISTINTOS) !!!
+//Para solicitar permisos de la cámara
 const val MY_PERMISSIONS_REQUEST_CAMERA = 1;
+//Para usar la cámara
 const val REQUEST_IMAGE_CAPTURE = 2;
 
 class MainActivity : AppCompatActivity() {
@@ -27,16 +29,16 @@ class MainActivity : AppCompatActivity() {
 
         //CHECKEO DE PERMISOS Y SOLICITUDES  EN UN BOTÓN
         btnCheck.setOnClickListener { checkPermisoCamara() }
-
-        btnFoto.setOnClickListener{dispatchTakePictureIntent()}
+        //SACAR Y OBTENER LA FOTO
+        btnFoto.setOnClickListener { sacarFoto() }
 
 
     }
 
     //SOLICITUD DE PERMISOS
-    //UNA VEZ LE DAMOS EL PERMISO, TENEMOS QUE QUITARLO PARA QUE VUELVA A PREGUNTAR POR ÉL
+    //UNA VEZ LE DAMOS EL PERMISO, TENEMOS QUE QUITARLO EN LOS AJUSTES DEL MÓVIL PARA QUE VUELVA A PREGUNTAR POR ÉL
     fun checkPermisoCamara() {
-
+        //COMPROBAMOS QUE TENEMOS EL PERMISO:
         //HACE FALTA PONER "android" !!
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -48,15 +50,13 @@ class MainActivity : AppCompatActivity() {
 
 
             //SALTAMOS LA EXPLICACIÓN DE POR QUÉ LO NECESITAMOS Y SOLICITAMOS EL PERMISO DIRECTAMENTE
-
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(android.Manifest.permission.CAMERA), MY_PERMISSIONS_REQUEST_CAMERA
             )
 
-            //SI LOS PERMISOS YA ESTÁN ACTIVOS
+            //SI LOS PERMISOS YA ESTÁN ACTIVOS:
         } else {
-
 
             toast("PERMISO ACTIVO")
 
@@ -65,10 +65,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //PARA HACER QUE SAQUE UNA FOTO Y LA MUESTRE POR PANTALLA:
-    //LA CÁMARA ES UNA ACTIVITY, POR ESO HACEMOS EL "onActivityResult"
-
-    private fun dispatchTakePictureIntent() {
+    //PARA HACER QUE SAQUE UNA FOTO Y LA MUESTRE POR PANTALLA (es decir, que se guarde como data de un intent a otro):
+    //LA CÁMARA SE TRATA COMO UNA ACTIVITY, POR ESO HACEMOS EL "onActivityResult"
+    private fun sacarFoto() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(packageManager)?.also {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //OJO!! EN "onActivityResult" PODEMOS RECOGER VARIOS DATOS DE FUNCIONES DISTINTAS, POR ESO SE UTILIZAN LOS REQUEST CODE
+    //OJO!! EN "onActivityResult" PODEMOS RECOGER VARIOS DATOS DE VARIAS FUNCIONES DISTINTAS, POR ESO SE UTILIZAN LOS REQUEST CODE
     //CON VALORES DISTINTOS
     //TRAS SACAR LA FOTO, SE LLAMARÁ A ESTA FUNCIÓN PARA OBTENERLA EN LA "IMAGEVIEW"
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -85,13 +84,13 @@ class MainActivity : AppCompatActivity() {
             //KOTLIN SIEMPRE NOS OBLIGARÁ A TRATAR ESOS VALORES QUE PUEDEN SER NULL DE ALGUNA MANERA
             //(por ej, con un "if" que controle si la variable es null o no (if...else...))
             //SI DE ALGUNA MANERA SABEMOS QUE ESA VARIABLE NO VA A SER NULL NUNCA, PODEMOS USAR EL OPERADOR "!!"
-            //
+
             val imageBitmap = data!!.extras!!.get("data") as Bitmap
             image.setImageBitmap(imageBitmap)
         }
     }
 
-    //EN LA DOCUMENTACIÓN HAY MANERAS PARA GUARDARLA EN LA GALERÍA Y MÁS FUNCIONES...
+    //EN LA DOCUMENTACIÓN HAY MANERAS PARA GUARDARLA EN LA GALERÍA Y MÁS...
 
 
 }
